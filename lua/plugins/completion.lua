@@ -1,9 +1,18 @@
 return {
   "saghen/blink.cmp",
-  version = "*",             -- use the latest stable release
+  dependencies = { "rafamadriz/friendly-snippets" },
+  version = "1.*",
   opts = {
-    keymap = { preset = "default" },  -- Tab/Enter to accept, Ctrl-n/p to navigate
-    appearance = { nerd_font_variant = "mono" },
-    sources = { default = { "lsp", "path", "snippets", "buffer" } },
+    keymap = { preset = "super-tab" },
+    completion = {
+      accept = {
+        auto_brackets = { enabled = true },
+      },
+      documentation = { auto_show = true },
+    },
+    signature = { enabled = true },
+    sources = {
+      default = { "lsp", "path", "snippets", "buffer" },
+    },
   },
 }

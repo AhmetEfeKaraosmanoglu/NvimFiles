@@ -26,6 +26,13 @@ vim.keymap.set("n", "<leader>x", function()
   vim.cmd("bdelete " .. buf)
 end, { desc = "Close buffer" })
 
+-- Close current buffer without closing the window/split
+vim.keymap.set("n", "<leader>X", function()
+  local buf = vim.api.nvim_get_current_buf()
+  vim.cmd("bnext")
+  vim.cmd("bdelete! " .. buf)
+end, { desc = "Close buffer" })
+
 -- Manual format trigger (format-on-save handles most cases, this is a fallback)
 vim.keymap.set({ "n", "v" }, "<leader>cf", function()
   require("conform").format({ lsp_fallback = true })

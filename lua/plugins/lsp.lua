@@ -1,10 +1,10 @@
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {},
   },
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     dependencies = { "mason.nvim", "neovim/nvim-lspconfig" },
     opts = {
       ensure_installed = { "clangd" },  -- auto-installs clangd, no manual download needed
@@ -17,6 +17,25 @@ return {
     -- which vim.lsp.config() merges with our overrides below.
     dependencies = { "saghen/blink.cmp" },
     config = function()
+      -- Diagnostic display: signs in the gutter, underline the offending code,
+      -- and show the full error/warning message on its own line, but only
+      -- for whichever line your cursor is actually on (keeps it uncluttered).
+      vim.diagnostic.config({
+        underline = true,
+        severity_sort = true,
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = "󰅚 ",
+            [vim.diagnostic.severity.WARN]  = "󰀪 ",
+            [vim.diagnostic.severity.INFO]  = "󰋽 ",
+            [vim.diagnostic.severity.HINT]  = "󰌶 ",
+          },
+        },
+        virtual_text = false,
+        virtual_lines = { current_line = true },
+      })
+
+
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
       vim.lsp.config("clangd", {
@@ -49,6 +68,16 @@ return {
           if client and client:supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
           end
+          vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {
+          buffer = args.buf,
+          desc = "Code action",
+          })
+        end,
+      })
+      -- Pop up the full diagnostic automatically when the cursor rests on it
+      vim.api.nvim_create_autocmd("CursorHold", {
+        callback = function()
+          vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
         end,
       })
     end,

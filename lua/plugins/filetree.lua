@@ -7,6 +7,12 @@ return {
   opts = {
     view = { width = 30 },
     renderer = { group_empty = true },
-    filters = { dotfiles = false },
+    filters = {
+      dotfiles = false,
+      git_ignored = false, -- <-- this was missing, hides build/ by default
+    },
+    git = {
+      ignore = false, -- <-- belt-and-suspenders, some versions need this too
+    },
   },
 }
