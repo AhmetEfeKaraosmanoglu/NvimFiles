@@ -64,16 +64,23 @@ return {
       -- Turn on Neovim's native inlay hint rendering once the LSP attaches
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
+          local bufname = vim.api.nvim_buf_get_name(args.buf)
+
+          -- Skip non-real-file buffers (diffview://, fugitive://, etc.) —
+          -- clangd only accepts 'file://' URIs and errors on requests otherwise.
+          if bufname:match("^%a+://") then
+            return
+          end
+
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if client and client:supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
           end
           vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {
-          buffer = args.buf,
-          desc = "Code action",
-          })
-        end,
-      })
+            buffer = args.buf,
+            desc = "Code action",
+          }) end,
+      })      
       -- Pop up the full diagnostic automatically when the cursor rests on it
       vim.api.nvim_create_autocmd("CursorHold", {
         callback = function()
