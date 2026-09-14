@@ -66,3 +66,20 @@ vim.keymap.set("n", "<leader>cb", "<cmd>CMakeBuild<CR>", { desc = "CMake: Build"
 vim.keymap.set("n", "<leader>cr", "<cmd>CMakeRun<CR>", { desc = "CMake: Run" })
 vim.keymap.set("n", "<leader>cd", "<cmd>CMakeDebug<CR>", { desc = "CMake: Debug (uses nvim-dap)" })
 vim.keymap.set("n", "<leader>ct", "<cmd>CMakeSelectBuildType<CR>", { desc = "CMake: Select build type" })
+
+-- Git diff keymaps
+vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", {
+  desc = "Git diff",
+})
+
+vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory<CR>", {
+  desc = "Git file history",
+})
+
+vim.keymap.set("n", "<leader>gq", "<cmd>DiffviewClose<CR>", {
+  desc = "Close git diff",
+})
+-- for lazygit
+vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", {
+    desc = "Open LazyGit",
+})
